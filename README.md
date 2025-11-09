@@ -17,6 +17,6 @@ cd ip-tracer
 # Give execute permission and run
 
 chmod +x cs-ip-tracer
-./cs-ip-tracer
+python3 cs-ip-tracer
 
 ```
