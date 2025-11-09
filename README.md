@@ -3,3 +3,20 @@
   <br><br>
   <b><font size="7">Cyber Squad 313</font></b>
 </p>
+
+
+### ⚙️ Installation
+🐧 Linux / macOS / Termux
+
+```
+# Clone repository
+
+git clone https://github.com/cybersquad313/ip-tracer.git
+cd ip-tracer
+
+# Give execute permission and run
+
+chmod +x cs-ip-tracer
+./cs-ip-tracer
+
+```
