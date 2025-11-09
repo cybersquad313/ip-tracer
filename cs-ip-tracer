@@ -1,0 +1,158 @@
+import requests, os, time, json, webbrowser, datetime, sys
+from colorama import init, Fore, Style
+
+init(autoreset=True)
+os.system('cls' if os.name == 'nt' else 'clear')
+
+banner = f"""{Fore.RED}
+ ██████╗██╗   ██╗██████╗ ███████╗██████╗     ███████╗██████╗  ██╗   ██╗ █████╗ ██████╗ 
+██╔════╝╚██╗ ██╔╝██╔══██╗██╔════╝██╔══██╗    ██╔════╝██╔═══██╗██║   ██║██╔══██╗██╔══██╗
+██║      ╚████╔╝ ██████╔╝█████╗  ██████╔╝    ███████╗██║   ██║██║   ██║███████║██║  ██║
+██║       ╚██╔╝  ██╔══██╗██╔══╝  ██╔══██╗    ╚════██║██║▄▄ ██║██║   ██║██╔══██║██║  ██║
+╚██████╗   ██║   ██████╔╝███████╗██║  ██║    ███████║╚██████╔╝╚██████╔╝██║  ██║██████╔╝
+ ╚═════╝   ╚═╝   ╚═════╝ ╚══════╝╚═╝  ╚═╝    ╚══════╝ ╚══▀▀═╝  ╚═════╝ ╚═╝  ╚═╝╚═════╝ 
+{Fore.CYAN}                WE ARE LEGION • WE DO NOT FORGIVE • WE DO NOT FORGET • EXPECT US
+{Fore.MAGENTA}                  Developed by Cyber Alpha | The Sigma H4ck3r © 2025 | Cyber Squad 313 
+{Fore.WHITE}                         PAKISTAN ✦ PALESTINE ✦ 313 CONTROLS THE GRID
+"""
+
+def beep():
+    print("\a" * 3, end="")
+
+def save_satellite_map(lat, lon, ip):
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"TARGET_{ip}_{timestamp}_SATELLITE.png"
+    
+    print(f"{Fore.YELLOW}[~] Coordinates confirmed: {lat}, {lon}{Style.RESET_ALL}")
+    time.sleep(1)
+    print(f"{Fore.GREEN}[+] Launching live satellite view...{Style.RESET_ALL}")
+    
+    urls = [
+        f"https://www.google.com/maps/@{lat},{lon},150m/data=!3m1!1e3",
+        f"https://earth.google.com/web/@{lat},{lon},200a,1000d,35y,0h,0t,0r",
+        f"https://www.bing.com/maps?cp={lat}~{lon}&lvl=19&style=a",
+        f"https://satellites.pro/#{lat},{lon},19",
+        f"https://www.openstreetmap.org/?mlat={lat}&mlon={lon}#map=19/{lat}/{lon}&layers=N"
+    ]
+
+    for url in urls:
+        try:
+            webbrowser.open(url, new=2)
+        except:
+            pass
+
+    try:
+        img_url = f"https://static.thunderforest.com/transport/{int(float(lat)*100)}/{int(float(lon)*100)}/15.png?apikey=free"
+        img_data = requests.get(img_url, timeout=8)
+        if img_data.status_code == 200:
+            with open(filename, "wb") as f:
+                f.write(img_data.content)
+            print(f"{Fore.CYAN}[✓] Satellite snapshot saved → {filename}{Style.RESET_ALL}")
+    except:
+        pass
+
+    print(f"{Fore.MAGENTA}[i] Visual confirmation complete. Target grid coordinates verified.{Style.RESET_ALL}")
+
+def safe_get(data, *keys, default=None):
+    for k in keys:
+        if isinstance(data, dict) and k in data and data[k] not in (None, ''):
+            return data[k]
+    return default
+
+def cyber_alpha_trace(ip):
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print(banner)
+    print(f"{Fore.YELLOW}[•] Acquiring target: {ip} ...")
+    time.sleep(2.2)
+    print(f"{Fore.GREEN}[✓] Target lock established.\n{Style.RESET_ALL}")
+    time.sleep(0.8)
+
+    apis = [
+        f"https://ipapi.co/{ip}/json/",
+        f"http://ip-api.com/json/{ip}?fields=66846719",
+        f"https://ipwho.is/{ip}",
+        f"https://api.ip.sb/geoip/{ip}",
+        f"https://ipinfo.io/{ip}/json",
+        f"https://freegeoip.app/json/{ip}",
+        f"https://ip-info.bjcoderx.workers.dev/?ip={ip}"   # your added API
+    ]
+
+    for api_url in apis:
+        try:
+            r = requests.get(api_url, timeout=8)
+            if r.status_code != 200:
+                continue
+
+            try:
+                data = r.json()
+            except:
+                continue
+
+            if isinstance(data, dict) and "data" in data:
+                data = data["data"]
+            if isinstance(data, dict) and "result" in data:
+                data = data["result"]
+
+            if data.get("error") or data.get("status") == "fail":
+                continue
+
+            beep()
+            print(f"{Fore.GREEN}╔═════════════════ TARGET DATA ACQUIRED ═════════════════╗{Style.RESET_ALL}")
+
+            ip_out = safe_get(data, "ip", "query", default=ip)
+            city = safe_get(data, "city", default="Hidden")
+            region = safe_get(data, "region", "regionName", default="Hidden")
+            country = safe_get(data, "country_name", "country", default="Unknown")
+            org = safe_get(data, "org", "isp", "organization", default="CLASSIFIED")
+            asn = safe_get(data, "asn", "as", default="N/A")
+            lat = safe_get(data, "latitude", "lat", default=None)
+            lon = safe_get(data, "longitude", "lon", default=None)
+            timezone = safe_get(data, "timezone", default="UTC")
+            postal = safe_get(data, "postal", "zip", default="XXXXX")
+            proxy = safe_get(data, "proxy", "hosting", default=False)
+            mobile = safe_get(data, "mobile", "is_mobile", default=False)
+
+            print(f"{Fore.CYAN}   IP Address   : {ip_out}")
+            print(f"   Location     : {city}, {region}, {country}")
+            print(f"   ISP / Org    : {org}")
+            print(f"   ASN          : {asn}")
+            print(f"   Device Type  : {'Mobile' if mobile else 'Desktop'}")
+            print(f"   Proxy / VPN  : {'Detected' if proxy else 'Clean'}")
+            print(f"   Coordinates  : {lat}, {lon}")
+            print(f"   Timezone     : {timezone} | Postal: {postal}")
+            if lat and lon:
+                print(f"   Google Maps  : https://maps.google.com?q={lat},{lon}")
+                print(f"   Satellite    : https://google.com/maps/@{lat},{lon},150m/data=!3m1!1e3")
+
+            print(f"{Fore.GREEN}╚═══════════════════ DATA VERIFIED ════════════════════╝{Style.RESET_ALL}")
+            
+            if lat and lon:
+                save_satellite_map(lat, lon, ip_out)
+            return
+
+        except Exception:
+            continue
+
+    print(f"{Fore.RED}[!] No valid response. Retrying in 15 seconds...{Style.RESET_ALL}")
+    time.sleep(15)
+    cyber_alpha_trace(ip)
+
+# MAIN
+try:
+    print(f"{Fore.MAGENTA}[Cyber Alpha] Enter target IP (leave blank for self-scan):{Style.RESET_ALL}")
+    target_ip = input(" >>> ").strip()
+
+    if not target_ip:
+        try:
+            target_ip = requests.get("https://api.ipify.org", timeout=10).text
+            print(f"{Fore.CYAN}[+] Your public IP detected: {target_ip}{Style.RESET_ALL}")
+        except:
+            target_ip = "8.8.8.8"
+            print(f"{Fore.RED}[!] Could not detect IP – using demo: {target_ip}{Style.RESET_ALL}")
+
+    cyber_alpha_trace(target_ip)
+
+except KeyboardInterrupt:
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print(f"{Fore.RED}\n[!] Operation aborted by user. Terminating cleanly...{Style.RESET_ALL}")
+    sys.exit(0)
