@@ -74,7 +74,7 @@ def cyber_alpha_trace(ip):
         f"https://api.ip.sb/geoip/{ip}",
         f"https://ipinfo.io/{ip}/json",
         f"https://freegeoip.app/json/{ip}",
-        f"https://ip-info.bjcoderx.workers.dev/?ip={ip}"   # your added API
+        f"https://ip-info.bjcoderx.workers.dev/?ip={ip}" 
     ]
 
     for api_url in apis:
